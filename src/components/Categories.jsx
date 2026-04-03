@@ -45,10 +45,35 @@ const drugSubcategories = [
 ];
 
 const drugProducts = [
-  { id: 1001, name: "Amoxicillin 500mg", desc: "Broad spectrum antibiotic", price: 15000, image: "https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg", badge: "Common" },
-  { id: 1002, name: "Paracetamol 500mg", desc: "Fast pain relief", price: 5000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300", badge: "Popular" },
-  { id: 1003, name: "Ciprofloxacin 500mg", desc: "Strong antibiotic", price: 25000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
-  { id: 1004, name: "Vitamin C Tablets", desc: "Immune booster", price: 12000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" }
+  // Analgesics
+  { id: 1001, subId: 'analgesics', name: "Paracetamol 500mg", desc: "Fast pain relief (100 Tabs)", price: 5000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300", badge: "Popular" },
+  { id: 1002, subId: 'analgesics', name: "Ibuprofen 400mg", desc: "Anti-inflammatory painkiller", price: 8500, image: "https://images.unsplash.com/photo-1583947581924-860bda6a5d0e?auto=format&fit=crop&q=80&w=300" },
+  { id: 1003, subId: 'analgesics', name: "Diclofenac Sodium 50mg", desc: "For joint and muscle pain", price: 6000, image: "https://images.unsplash.com/photo-1550572017-edb78996b797?auto=format&fit=crop&q=80&w=300" },
+  
+  // Antibiotics
+  { id: 1004, subId: 'antibiotics', name: "Amoxicillin 500mg", desc: "Broad spectrum antibiotic", price: 15000, image: "https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg", badge: "Common" },
+  { id: 1005, subId: 'antibiotics', name: "Ciprofloxacin 500mg", desc: "Strong antibiotic", price: 25000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
+  { id: 1006, subId: 'antibiotics', name: "Azithromycin 500mg", desc: "Macrolide antibiotic", price: 30000, image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=300", badge: "Hot" },
+  
+  // Antimalarials
+  { id: 1007, subId: 'antimalarials', name: "Artemether-Lumefantrine", desc: "First-line malaria treatment", price: 18000, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=300", badge: "Essential" },
+  { id: 1008, subId: 'antimalarials', name: "Quinine Sulphate 300mg", desc: "Severe malaria management", price: 22000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
+  
+  // Supplements
+  { id: 1009, subId: 'supplements', name: "Vitamin C Tablets 1000mg", desc: "Immune booster", price: 12000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
+  { id: 1010, subId: 'supplements', name: "Zinc Sulphate 20mg", desc: "Essential trace element", price: 9000, image: "https://images.unsplash.com/photo-1584622781564-1d9876a3e75d?auto=format&fit=crop&q=80&w=300" },
+  { id: 1011, subId: 'supplements', name: "Multivitamin Syrup", desc: "Daily dietary supplement", price: 18500, image: "https://images.unsplash.com/photo-1550572017-48f86f6a7d77?auto=format&fit=crop&q=80&w=300" },
+
+  // Cardiovascular
+  { id: 1012, subId: 'cardiovascular', name: "Amlodipine 5mg", desc: "Calcium channel blocker", price: 14000, image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=300" },
+  { id: 1013, subId: 'cardiovascular', name: "Losartan 50mg", desc: "Blood pressure management", price: 21000, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
+
+  // Antidiabetics
+  { id: 1014, subId: 'antidiabetics', name: "Metformin 500mg", desc: "Type 2 diabetes management", price: 11000, image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=300" },
+  
+  // Ophthalmic
+  { id: 1015, subId: 'ophthalmic', name: "Timolol Eye Drops 0.5%", desc: "Glaucoma relief drops", price: 16500, image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" },
+  { id: 1016, subId: 'ophthalmic', name: "Ciprofloxacin Eye Drops", desc: "Antibacterial eye protection", price: 13000, image: "https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&q=80&w=300" }
 ];
 
 export default function Categories({ isPage, onToggle }) {
@@ -73,19 +98,27 @@ export default function Categories({ isPage, onToggle }) {
   };
 
   if (selectedSub) {
+    const classProducts = drugProducts.filter(p => p.subId === selectedSub.id);
+
     return (
       <div className="categories-page-wrapper">
         <button className="back-line-btn" onClick={backToSub}>
           <ArrowLeft size={18} /> Back to {activeCategory}
         </button>
-        <div className="section-header">
-          <h3 className="section-title">{selectedSub.name}</h3>
-        </div>
-        <div className="empty-category-state fade-in" style={{ textAlign: 'center', padding: '40px 20px', color: '#666', background: '#fff', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
-          <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" style={{width: '100px', borderRadius: '20px', marginBottom: '20px', opacity: '0.4'}} alt="Empty" />
-          <h4 style={{fontSize: '18px', color: '#333'}}>No products yet</h4>
-          <p style={{fontSize: '13px', marginTop: '8px'}}>Products in this category are coming soon.</p>
-        </div>
+        {classProducts.length > 0 ? (
+          <ProductGrid title={selectedSub.name} products={classProducts} />
+        ) : (
+          <div>
+            <div className="section-header">
+              <h3 className="section-title">{selectedSub.name}</h3>
+            </div>
+            <div className="empty-category-state fade-in" style={{ textAlign: 'center', padding: '40px 20px', color: '#666', background: '#fff', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300" style={{width: '100px', borderRadius: '20px', marginBottom: '20px', opacity: '0.4'}} alt="Empty" />
+              <h4 style={{fontSize: '18px', color: '#333'}}>No products yet</h4>
+              <p style={{fontSize: '13px', marginTop: '8px'}}>Products in this category are coming soon.</p>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
