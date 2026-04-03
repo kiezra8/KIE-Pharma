@@ -1,0 +1,31 @@
+import React from 'react';
+import { Search, Heart, User, Bell } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import './Header.css';
+
+export default function Header() {
+  const { cartCount } = useCart();
+
+  return (
+    <header className="header">
+      <div className="header-top">
+        <div className="logo">
+          SkieZ
+        </div>
+        <div className="header-icons">
+          <div className="wishlist-header-icon">
+            <Heart size={20} strokeWidth={2.5} />
+          </div>
+          <div className="account-header-icon">
+            <Bell size={20} strokeWidth={2.5} />
+            {cartCount > 0 && <span className="wishlist-badge">{cartCount}</span>}
+          </div>
+        </div>
+      </div>
+      <div className="search-bar">
+        <Search size={18} color="#999" />
+        <input type="text" placeholder="Search medical supplies..." readOnly />
+      </div>
+    </header>
+  );
+}

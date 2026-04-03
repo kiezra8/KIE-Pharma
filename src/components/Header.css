@@ -1,0 +1,105 @@
+.header {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  background: #fffffff2;
+  width: 100%;
+  padding: 10px 15px;
+  transition: all .3s;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 10px #0000000d;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logo {
+  background: var(--primary-gradient-logo);
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  -webkit-background-clip: text;
+  background-clip: text;
+  flex-shrink: 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.search-bar {
+  background: #f5f5f5;
+  border: 2px solid #0000;
+  border-radius: 20px;
+  flex: 1;
+  align-items: center;
+  max-width: 100%;
+  padding: 8px 15px;
+  transition: all .3s;
+  display: flex;
+}
+
+.search-bar:focus-within {
+  background: #fff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 4px #ff6b6b1a;
+}
+
+.search-bar input {
+  background: 0 0;
+  border: none;
+  outline: none;
+  flex: 1;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.search-bar input::placeholder {
+  color: #999;
+}
+
+.header-icons {
+  flex-shrink: 0;
+  gap: 10px;
+  display: flex;
+}
+
+.wishlist-header-icon, .account-header-icon {
+  background: #f5f5f5;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  transition: all .3s;
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  color: #333;
+}
+
+.wishlist-header-icon:hover, .account-header-icon:hover {
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+.wishlist-badge {
+  color: #fff;
+  background: var(--primary);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
