@@ -35,11 +35,20 @@ const defaultGeneral = [
 ];
 
 function AppContent() {
+  const [session, setSession] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [allProductsRaw, setAllProductsRaw] = useState(defaultGeneral);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAppLoading, setIsAppLoading] = useState(true);
+
+  const isAdmin = session?.user?.email === 'israelezrakisakye@gmail.com';
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setSession(session));
+    return () => subscription.unsubscribe();
+  }, []);
 
   const trendingProducts = allProductsRaw.filter(p => 
     (['Hot', 'Trending', 'New'].includes(p.badge)) && 
@@ -58,7 +67,6 @@ function AppContent() {
       } catch (err) {
         console.error("Catalog Init Error:", err);
       } finally {
-        // Minimum 1.5s for the brand splash feel
         setTimeout(() => setIsAppLoading(false), 1500);
       }
     }
@@ -93,17 +101,17 @@ function AppContent() {
   const renderContent = () => {
     switch (activeTab) {
       case 'cart': return <Cart />;
-      case 'categories': return <Categories isPage={true} onToggle={setIsCategoryOpen} />;
+      case 'categories': return <Categories isPage={true} onToggle={setIsCategoryOpen} isAdmin={isAdmin} />;
       case 'admin': return <Admin />;
       case 'account': return <Account onAdminClick={() => setActiveTab('admin')} />;
       default: return (
         <>
-          {!isCategoryOpen && <HeroSlider />}
-          <Categories onToggle={setIsCategoryOpen} />
+          {!isCategoryOpen && <HeroSlider isAdmin={isAdmin} />}
+          <Categories onToggle={setIsCategoryOpen} isAdmin={isAdmin} />
           {!isCategoryOpen && (
             <>
-              <ProductGrid title="Essential & Trending" products={trendingProducts} />
-              <ProductGrid title="All Products" products={generalProducts} />
+              <ProductGrid title="Essential & Trending" products={trendingProducts} isAdmin={isAdmin} />
+              <ProductGrid title="All Products" products={generalProducts} isAdmin={isAdmin} />
             </>
           )}
         </>

@@ -13,12 +13,15 @@ const fallbackCategories = [
   { id: 6, name: "Diagnostics", img: "https://i.pinimg.com/736x/dc/c7/36/dcc73645645065ebee4fba4297c7e937.jpg" }
 ];
 
-export default function Categories({ isPage, onToggle }) {
+import { pickAndUploadImage } from '../utils/imageUtils';
+
+export default function Categories({ isPage, onToggle, isAdmin }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedSub, setSelectedSub] = useState(null);
   const [categories, setCategories] = useState(fallbackCategories);
   const [subcategories, setSubcategories] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [sync, setSync] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +30,6 @@ export default function Categories({ isPage, onToggle }) {
       const { data: prods } = await supabase.from('products').select('*');
       
       if (cats && cats.length > 0) {
-        // Strict Name Deduplication
         const seen = new Set();
         const unique = cats.filter(c => {
           if (['Dental', 'Nursing'].includes(c.name)) return false;
@@ -36,18 +38,22 @@ export default function Categories({ isPage, onToggle }) {
           return !duplicate;
         });
         setCategories(unique);
-        
-        // Instant Image Preloading
-        unique.forEach(c => {
-          const img = new Image();
-          img.src = c.img || c.image;
-        });
+        unique.forEach(c => { const img = new Image(); img.src = c.img || c.image; });
       }
       if (subs) setSubcategories(subs);
       if (prods) setAllProducts(prods);
     }
     fetchData();
-  }, []);
+  }, [sync]);
+
+  const handleQuickSwap = async (e, item, table) => {
+     e.stopPropagation();
+     const url = await pickAndUploadImage();
+     if (url) {
+        await supabase.from(table).update({ img: url }).eq('id', item.id);
+        setSync(s => s + 1);
+     }
+  };
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
@@ -108,6 +114,7 @@ export default function Categories({ isPage, onToggle }) {
                   <div key={sub.id} className="subcategory-card-premium" onClick={() => setSelectedSub(sub)}>
                     <div className="sub-card-img">
                       <img src={sub.img || sub.image || "https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg"} alt={sub.name} />
+                      {isAdmin && <button className="quick-edit-img-btn" onClick={(e) => handleQuickSwap(e, sub, 'subcategories')}>📸 Change</button>}
                     </div>
                     <div className="sub-card-info">
                       <h4>{sub.name}</h4>
@@ -148,6 +155,7 @@ export default function Categories({ isPage, onToggle }) {
           {categories.map(cat => (
             <div key={cat.id} className="category-list-item-premium fade-in" onClick={() => handleCategoryClick(cat)}>
               <img src={cat.img || cat.image} alt={cat.name} className="cat-list-img" />
+              {isAdmin && <button className="quick-edit-img-btn" style={{zIndex: 30}} onClick={(e) => handleQuickSwap(e, cat, 'categories')}>📸 Change Image</button>}
               <div className="category-list-overlay">
                 <div className="category-list-content">
                   <h4>{cat.name}</h4>
@@ -173,6 +181,7 @@ export default function Categories({ isPage, onToggle }) {
             <div key={cat.id} className="category-item-circular" onClick={() => handleCategoryClick(cat)}>
               <div className="category-circle-img">
                 <img src={cat.img || cat.image} alt={cat.name} className="cat-img-grid" />
+                {isAdmin && <button className="quick-edit-img-btn small" onClick={(e) => handleQuickSwap(e, cat, 'categories')}>📸</button>}
               </div>
               <span className="category-label">{cat.name}</span>
             </div>

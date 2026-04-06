@@ -20,9 +20,18 @@ DELETE FROM categories a
 USING categories b 
 WHERE a.id > b.id AND a.name = b.name;
 
--- 3. ENSURE PARENT "DRUGS" CATEGORY EXISTS (ID 1)
+-- 3. ENSURE 10 CORE CATEGORIES EXIST (ID 1-10)
 INSERT INTO categories (id, name, img) VALUES 
-(1, 'Drugs', 'https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg')
+(1, 'Drugs', 'https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg'),
+(2, 'Consumables', 'https://i.pinimg.com/1200x/de/14/de/de14de238d3b3aa763fba68c0d02db2a.jpg'),
+(3, 'Surgical', 'https://images.unsplash.com/photo-1584622781564-1d9876a3e75d?auto=format&fit=crop&q=80&w=300'),
+(4, 'Orthopedics', 'https://i.pinimg.com/1200x/a0/26/d7/a026d781617586521eb1809e29cb1764.jpg'),
+(5, 'Laboratory', 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=300'),
+(6, 'Diagnostics', 'https://i.pinimg.com/736x/dc/c7/36/dcc73645645065ebee4fba4297c7e937.jpg'),
+(7, 'Equipment', 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1200'),
+(8, 'Radiology', 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=300'),
+(9, 'Nursing', 'https://images.unsplash.com/photo-1576091160550-217359f49f4c?auto=format&fit=crop&q=80&w=300'),
+(10, 'Health Kits', 'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?auto=format&fit=crop&q=80&w=300')
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, img = EXCLUDED.img;
 
 -- 4. RESTORE CORE DRUG CLASSES (Linked to ID 1)

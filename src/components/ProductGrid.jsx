@@ -4,9 +4,21 @@ import { useCart } from '../context/CartContext';
 import ProductDetail from './ProductDetail';
 import './ProductGrid.css';
 
-export default function ProductGrid({ title, products }) {
+import { pickAndUploadImage } from '../utils/imageUtils';
+import { supabase } from '../supabaseClient';
+
+export default function ProductGrid({ title, products, isAdmin }) {
   const { addToCart } = useCart();
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleQuickSwap = async (e, item) => {
+    e.stopPropagation();
+    const url = await pickAndUploadImage();
+    if (url) {
+       await supabase.from('products').update({ image: url }).eq('id', item.id);
+       window.location.reload(); // Quickest way to sync all products on home
+    }
+ };
 
   return (
     <section className="products-section">
@@ -18,6 +30,7 @@ export default function ProductGrid({ title, products }) {
           <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)} style={{ cursor: 'pointer' }}>
             <div className="product-image-container">
               <img src={product.image} alt={product.name} className="product-image" />
+              {isAdmin && <button className="quick-edit-img-btn" onClick={(e) => handleQuickSwap(e, product)}>📸 Change</button>}
               {product.badge && <span className="product-discount">{product.badge}</span>}
               <div className="product-wishlist" onClick={(e) => e.stopPropagation()}>
                 <Heart size={16} />

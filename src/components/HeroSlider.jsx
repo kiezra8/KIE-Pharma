@@ -8,15 +8,18 @@ const defaultBanners = [
   { id: 3, title: "Quality Lab Equipment", subtitle: "Precision tools for modern medical diagnostic centers.", img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=1200" }
 ];
 
-export default function HeroSlider() {
+import { pickAndUploadImage } from '../utils/imageUtils';
+
+export default function HeroSlider({ isAdmin }) {
   const [index, setIndex] = useState(0);
   const [banners, setBanners] = useState(defaultBanners);
+  const [sync, setSync] = useState(0);
 
   useEffect(() => {
     supabase.from('animations').select('*').then(({ data }) => {
       if (data && data.length > 0) setBanners(data);
     });
-  }, []);
+  }, [sync]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,12 +28,25 @@ export default function HeroSlider() {
     return () => clearInterval(timer);
   }, [banners.length]);
 
+  const handleQuickSwap = async (item) => {
+     const url = await pickAndUploadImage();
+     if (url) {
+        await supabase.from('animations').update({ img: url }).eq('id', item.id);
+        setSync(s => s + 1);
+     }
+  };
+
   return (
     <div className="banners-container">
       <div className="banner-slider">
         {banners.map((item, i) => (
           <div key={item.id} className={`banner ${i === index ? 'active' : ''}`}>
             <img src={item.img} alt={item.title} />
+            {isAdmin && (
+               <button className="live-edit-overlay" onClick={() => handleQuickSwap(item)}>
+                  <div className="live-edit-icon">📸 Change Banner Image</div>
+               </button>
+            )}
             <div className="banner-overlay suit-up-style">
               <h3>{item.title}</h3>
               <p>{item.subtitle}</p>

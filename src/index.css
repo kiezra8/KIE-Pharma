@@ -161,3 +161,58 @@ a { text-decoration: none; color: inherit; }
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+/* LIVE ADMIN CONTROLS */
+.quick-edit-img-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(18, 20, 24, 0.8);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  z-index: 100;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quick-edit-img-btn.small {
+  padding: 6px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.quick-edit-img-btn:hover { background: #FF4D8D; transform: scale(1.05); }
+
+.live-edit-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.live-edit-icon {
+  background: rgba(255,255,255,0.9);
+  color: #121418;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
