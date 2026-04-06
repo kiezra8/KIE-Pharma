@@ -26,10 +26,22 @@ export default function Categories({ isPage, onToggle }) {
       const { data: subs } = await supabase.from('subcategories').select('*');
       const { data: prods } = await supabase.from('products').select('*');
       
-      // Filter out broken Categories (Dental/Nursing)
-      if (cats) {
-        const filtered = cats.filter(c => !['Dental', 'Nursing'].includes(c.name));
-        setCategories(filtered.length > 0 ? filtered : fallbackCategories);
+      if (cats && cats.length > 0) {
+        // Strict Name Deduplication
+        const seen = new Set();
+        const unique = cats.filter(c => {
+          if (['Dental', 'Nursing'].includes(c.name)) return false;
+          const duplicate = seen.has(c.name.toLowerCase());
+          seen.add(c.name.toLowerCase());
+          return !duplicate;
+        });
+        setCategories(unique);
+        
+        // Instant Image Preloading
+        unique.forEach(c => {
+          const img = new Image();
+          img.src = c.img || c.image;
+        });
       }
       if (subs) setSubcategories(subs);
       if (prods) setAllProducts(prods);

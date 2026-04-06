@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
-import { Camera, Plus, Trash2, Edit2, X, Image as ImageIcon, Box, Layout, Sliders, ChevronRight } from 'lucide-react';
+import { Camera, Plus, Trash2, Edit2, X, Box, Layout, Sliders, ChevronRight, Check } from 'lucide-react';
 import './Admin.css';
 
 export default function Admin() {
@@ -9,254 +9,191 @@ export default function Admin() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [adminData, setAdminData] = useState({ products: [], categories: [], subcategories: [], animations: [] });
   
-  // Modal States
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState(''); // 'product', 'category', 'class', 'banner'
-  const [editingItem, setEditingItem] = useState(null);
+  // Navigation
+  const [activeTab, setActiveTab] = useState('products');
+  const [adminData, setAdminData] = useState({ products: [], categories: [], subcategories: [], animations: [] });
+
+  // Modal State
+  const [showForm, setShowForm] = useState(false);
+  const [targetItem, setTargetItem] = useState(null);
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    let mounted = true;
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (mounted) { setSession(session); setIsInitializing(false); }
+      setSession(session);
+      setIsInitializing(false);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (mounted) setSession(session);
-    });
-    return () => { mounted = false; subscription.unsubscribe(); };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    return () => subscription.unsubscribe();
   }, []);
 
-  const syncData = async () => {
-    const { data: p } = await supabase.from('products').select('*');
-    const { data: c } = await supabase.from('categories').select('*');
-    const { data: s } = await supabase.from('subcategories').select('*');
-    const { data: a } = await supabase.from('animations').select('*');
+  const fetchData = async () => {
+    const { data: p } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    const { data: c } = await supabase.from('categories').select('*').order('created_at', { ascending: false });
+    const { data: s } = await supabase.from('subcategories').select('*').order('created_at', { ascending: false });
+    const { data: a } = await supabase.from('animations').select('*').order('created_at', { ascending: false });
     setAdminData({ products: p || [], categories: c || [], subcategories: s || [], animations: a || [] });
   };
 
-  useEffect(() => { if (session) syncData(); }, [session]);
+  useEffect(() => { if (session) fetchData(); }, [session]);
 
   const handleLogin = async (e) => {
     e.preventDefault(); setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) alert("Login Error: " + error.message);
+    if (error) alert(error.message);
     setLoading(false);
   };
 
-  const handleLogout = async () => { await supabase.auth.signOut(); };
-
-  const pickAndUploadImage = async () => {
-     return new Promise((resolve) => {
-      const input = document.createElement('input');
-      input.type = 'file'; input.accept = 'image/*';
-      input.onchange = async (e) => {
-        const file = e.target.files[0]; if (!file) return resolve(null);
-        try {
-          const fileName = `${Date.now()}_${Math.random()}.${file.name.split('.').pop()}`;
-          const { error } = await supabase.storage.from('app_images').upload(fileName, file);
-          if (error) { alert("Upload Error: " + error.message); return resolve(null); }
-          const { data: { publicUrl } } = supabase.storage.from('app_images').getPublicUrl(fileName);
-          resolve(publicUrl);
-        } catch (error) { alert('Upload failed.'); resolve(null); }
-      };
-      input.click();
-    });
-  };
-
-  const openForm = (type, item = null) => {
-    setModalType(type);
-    setEditingItem(item);
-    setFormData(item || {});
-    setShowModal(true);
+  const pickImage = async (field) => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      setLoading(true);
+      const name = `${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('app_images').upload(name, file);
+      if (error) { alert(error.message); setLoading(false); return; }
+      const { data: { publicUrl } } = supabase.storage.from('app_images').getPublicUrl(name);
+      setFormData(prev => ({ ...prev, [field]: publicUrl }));
+      setLoading(false);
+    };
+    input.click();
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    let table = modalType === 'banner' ? 'animations' : (modalType === 'class' ? 'subcategories' : (modalType === 'product' ? 'products' : 'categories'));
-    
+    let table = activeTab === 'banners' ? 'animations' : (activeTab === 'drug classes' ? 'subcategories' : activeTab);
     try {
-      if (editingItem) {
-        await supabase.from(table).update(formData).eq('id', editingItem.id);
+      if (targetItem) {
+        await supabase.from(table).update(formData).eq('id', targetItem.id);
       } else {
         await supabase.from(table).insert([formData]);
       }
-      setShowModal(false);
-      syncData();
-    } catch (err) {
-      alert("Error saving: " + err.message);
-    }
+      setShowForm(false);
+      fetchData();
+    } catch (err) { alert(err.message); }
     setLoading(false);
   };
 
-  const handleDelete = async (table, id) => {
-    if (!window.confirm("Delete this item permanently?")) return;
-    setLoading(true);
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete permanently?")) return;
+    let table = activeTab === 'banners' ? 'animations' : (activeTab === 'drug classes' ? 'subcategories' : activeTab);
     await supabase.from(table).delete().eq('id', id);
-    syncData();
-    setLoading(false);
+    fetchData();
   };
 
-  if (isInitializing) return <div className="admin-loader">Secure System Initializing...</div>;
+  if (isInitializing) return <div className="admin-status">Connecting to SkieZ Vault...</div>;
 
   if (!session) {
     return (
-      <div className="admin-wrapper fade-in">
-        <form className="admin-login-box" onSubmit={handleLogin}>
-          <h2>SKIEZ | ADMIN</h2>
-          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="admin-input" />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="admin-input" />
-          <button type="submit" disabled={loading} className="admin-btn primary">{loading ? 'Verifying...' : 'Sign In'}</button>
+      <div className="admin-auth-page">
+        <form className="auth-card" onSubmit={handleLogin}>
+          <h2>SKIEZ ADMIN</h2>
+          <p>Master Console Unlock</p>
+          <input type="email" placeholder="Admin Identity" value={email} onChange={e => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Key" value={password} onChange={e => setPassword(e.target.value)} required />
+          <button type="submit" disabled={loading}>{loading ? 'Syncing...' : 'Authenticate'}</button>
         </form>
       </div>
     );
   }
 
-  const userEmail = session.user?.email;
-  if (userEmail !== 'israelezrakisakye@gmail.com') {
-    return (
-      <div className="admin-wrapper fade-in">
-        <div className="admin-alert">
-          <h2>Unauthorized Access</h2>
-          <p>This area is restricted to the master administrator account.</p>
-          <button onClick={handleLogout} className="admin-btn primary outline">Switch Account</button>
-        </div>
-      </div>
-    );
-  }
+  const isMaster = session.user.email === 'israelezrakisakye@gmail.com';
+  if (!isMaster) return <div className="admin-status">Access Denied. Identity mismatch.</div>;
+
+  const currentList = activeTab === 'products' ? adminData.products : (activeTab === 'categories' ? adminData.categories : (activeTab === 'drug classes' ? adminData.subcategories : adminData.animations));
 
   return (
-    <div className="admin-dashboard-container fade-in">
-      <div className="admin-top-bar primary-style">
-        <div>
-          <h2>CONTROL HUB</h2>
-          <div className="admin-user-pill">Admin Mode Active</div>
-        </div>
-        <button onClick={handleLogout} className="admin-btn text coral">Sign Out</button>
-      </div>
-      
-      <div className="admin-main-grid">
-        {/* PRODUCTS CARD */}
-        <div className="admin-control-card premium">
-          <div className="card-top">
-            <div className="card-icon-title"><Box size={20} className="icon-pink" /> <h3>Products</h3></div>
-            <button className="add-icon-btn" onClick={() => openForm('product')}><Plus size={20}/></button>
-          </div>
-          <div className="id-catalog-list">
-            {adminData.products.map(p => (
-              <div key={p.id} className="catalog-item-row">
-                <div className="item-thumbnail"><img src={p.image} alt="p" /></div>
-                <div className="item-txt"><h4>{p.name}</h4><span>ID: {p.id} • UGX {p.price?.toLocaleString()}</span></div>
-                <div className="row-actions">
-                  <button onClick={() => openForm('product', p)}><Edit2 size={14}/></button>
-                  <button className="del" onClick={() => handleDelete('products', p.id)}><Trash2 size={14}/></button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* BANNERS CARD */}
-        <div className="admin-control-card premium">
-          <div className="card-top">
-            <div className="card-icon-title"><Sliders size={20} className="icon-orange" /> <h3>Animations</h3></div>
-            <button className="add-icon-btn" onClick={() => openForm('banner')}><Plus size={20}/></button>
-          </div>
-          <div className="id-catalog-list">
-            {adminData.animations.map(a => (
-              <div key={a.id} className="catalog-item-row">
-                <div className="item-thumbnail"><img src={a.img} alt="a" /></div>
-                <div className="item-txt"><h4>{a.title}</h4><span>ID: {a.id}</span></div>
-                <div className="row-actions">
-                  <button onClick={() => openForm('banner', a)}><Edit2 size={14}/></button>
-                  <button className="del" onClick={() => handleDelete('animations', a.id)}><Trash2 size={14}/></button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className="admin-pro-layout">
+      {/* Sidebar - Desktop Only / Fixed - Modern */}
+      <aside className="admin-nav-rail">
+        <div className="nav-brand">SKIEZ</div>
+        <div className={`rail-item ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}><Box /> <span>Products</span></div>
+        <div className={`rail-item ${activeTab === 'categories' ? 'active' : ''}`} onClick={() => setActiveTab('categories')}><Layout /> <span>Categories</span></div>
+        <div className={`rail-item ${activeTab === 'drug classes' ? 'active' : ''}`} onClick={() => setActiveTab('drug classes')}><ChevronRight /> <span>Classes</span></div>
+        <div className={`rail-item ${activeTab === 'banners' ? 'active' : ''}`} onClick={() => setActiveTab('banners')}><Sliders /> <span>Banners</span></div>
+        <button className="rail-logout" onClick={() => supabase.auth.signOut()}>Sign Out</button>
+      </aside>
 
-        {/* CATEGORIES CARD */}
-        <div className="admin-control-card premium">
-          <div className="card-top">
-            <div className="card-icon-title"><Layout size={20} className="icon-blue" /> <h3>Categories</h3></div>
-            <button className="add-icon-btn" onClick={() => openForm('category')}><Plus size={20}/></button>
+      {/* Main Panel */}
+      <main className="admin-view-panel">
+        <header className="view-header">
+          <div>
+            <h1>{activeTab.toUpperCase()}</h1>
+            <p>Managing {currentList.length} active database records.</p>
           </div>
-          <div className="id-catalog-list">
-            {adminData.categories.map(c => (
-              <div key={c.id} className="catalog-item-row">
-                <div className="item-thumbnail"><img src={c.img || c.image} alt="c" /></div>
-                <div className="item-txt"><h4>{c.name}</h4><span>ID: {c.id}</span></div>
-                <div className="row-actions">
-                  <button onClick={() => openForm('category', c)}><Edit2 size={14}/></button>
-                  <button className="del" onClick={() => handleDelete('categories', c.id)}><Trash2 size={14}/></button>
+          <button className="pro-add-btn" onClick={() => { setTargetItem(null); setFormData({}); setShowForm(true); }}>
+            <Plus size={20} /> Add New {activeTab.slice(0,-1)}
+          </button>
+        </header>
+
+        <section className="pro-data-grid">
+          {currentList.map(item => (
+            <div key={item.id} className="pro-data-card">
+              <div className="pro-card-img">
+                <img src={item.image || item.img || item.imageurl} alt="p" />
+                <button className="img-swap-overlay" onClick={() => { setTargetItem(item); setFormData(item); pickImage(activeTab === 'products' ? 'image' : 'img'); }}>
+                  <Camera size={18} />
+                </button>
+              </div>
+              <div className="pro-card-body">
+                <h4>{item.name || item.title}</h4>
+                <div className="pro-card-meta">
+                  {item.price && <span>UGX {item.price.toLocaleString()}</span>}
+                  <span>ID: {item.id}</span>
+                </div>
+                <div className="pro-card-actions">
+                  <button onClick={() => { setTargetItem(item); setFormData(item); setShowForm(true); }}><Edit2 size={16} /> Edit Data</button>
+                  <button className="del-btn" onClick={() => handleDelete(item.id)}><Trash2 size={16} /></button>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CLASSES CARD (DRUGS ONLY) */}
-        <div className="admin-control-card premium">
-          <div className="card-top">
-            <div className="card-icon-title"><ChevronRight size={20} className="icon-green" /> <h3>Drug Classes</h3></div>
-            <button className="add-icon-btn" onClick={() => openForm('class')}><Plus size={20}/></button>
-          </div>
-          <div className="id-catalog-list">
-            {adminData.subcategories.map(s => (
-              <div key={s.id} className="catalog-item-row">
-                <div className="item-thumbnail"><img src={s.img || s.image} alt="s" /></div>
-                <div className="item-txt"><h4>{s.name}</h4><span>ID: {s.id} • Parent ID: {s.category_id}</span></div>
-                <div className="row-actions">
-                  <button onClick={() => openForm('class', s)}><Edit2 size={14}/></button>
-                  <button className="del" onClick={() => handleDelete('subcategories', s.id)}><Trash2 size={14}/></button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* GLOBAL FORM MODAL */}
-      {showModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal-box fade-in">
-            <div className="modal-head">
-              <h3>{editingItem ? 'Edit Entry' : 'Create New'}</h3>
-              <button onClick={() => setShowModal(false)}><X size={20}/></button>
             </div>
-            <form onSubmit={handleSave} className="admin-item-form">
-              <div className="form-img-picker" onClick={async() => {
-                 const url = await pickAndUploadImage();
-                 if (url) setFormData({...formData, [modalType === 'banner' ? 'img' : (modalType === 'product' ? 'image' : 'img')]: url});
-              }}>
-                {(formData.image || formData.img) ? (
-                  <img src={formData.image || formData.img} alt="prev" />
-                ) : (
-                  <div className="picker-placeholder"><Camera size={24}/> <span>Upload Image</span></div>
-                )}
-                <div className="picker-overlay"><Plus size={20}/></div>
-              </div>
-              
-              <div className="form-group">
-                <label>Title / Name</label>
-                <input name="title" value={formData.name || formData.title || ''} onChange={e => setFormData({...formData, [modalType === 'banner' ? 'title' : 'name']: e.target.value})} required />
-              </div>
+          ))}
+        </section>
+      </main>
 
-              {modalType === 'product' && (
-                <div className="form-row">
-                  <div className="form-group"><label>Price (UGX)</label><input type="number" value={formData.price || ''} onChange={e => setFormData({...formData, price: e.target.value})} /></div>
-                  <div className="form-group"><label>Class ID</label><input type="number" value={formData.subcategory_id || ''} onChange={e => setFormData({...formData, subcategory_id: e.target.value})} /></div>
-                </div>
-              )}
+      {/* Mobile Nav Rail (Footer on Mobile) */}
+      <div className="admin-mobile-nav">
+          <div className={`m-nav-item ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}><Box /></div>
+          <div className={`m-nav-item ${activeTab === 'categories' ? 'active' : ''}`} onClick={() => setActiveTab('categories')}><Layout /></div>
+          <div className={`m-nav-item ${activeTab === 'drug classes' ? 'active' : ''}`} onClick={() => setActiveTab('drug classes')}><ChevronRight /></div>
+          <div className={`m-nav-item ${activeTab === 'banners' ? 'active' : ''}`} onClick={() => setActiveTab('banners')}><Sliders /></div>
+      </div>
 
-              {modalType === 'class' && (
-                <div className="form-group"><label>Parent Category ID (Drugs=1)</label><input type="number" value={formData.category_id || ''} onChange={e => setFormData({...formData, category_id: e.target.value})} /></div>
-              )}
+      {/* Modern Data Form Modal */}
+      {showForm && (
+        <div className="pro-modal-overlay">
+          <div className="pro-modal-window">
+            <div className="modal-top">
+              <h3>{targetItem ? 'Update Database' : 'New Database Entry'}</h3>
+              <button onClick={() => setShowForm(false)}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleSave} className="pro-form">
+               <div className="pro-form-img-container" onClick={() => pickImage(activeTab === 'products' ? 'image' : 'img')}>
+                  {(formData.image || formData.img) ? <img src={formData.image || formData.img} /> : <div className="img-placeholder"><Camera /> Change Content Image</div>}
+               </div>
 
-              <button type="submit" disabled={loading} className="save-btn">{loading ? 'Syncing...' : (editingItem ? 'Update Database' : 'Finalize Entry')}</button>
+               <div className="pro-input-group">
+                  <label>Label / Title</label>
+                  <input value={formData.name || formData.title || ''} onChange={e => setFormData({...formData, [activeTab === 'banners' ? 'title' : 'name']: e.target.value})} />
+               </div>
+
+               {activeTab === 'products' && (
+                 <div className="form-split">
+                    <div className="pro-input-group"><label>Price (UGX)</label><input type="number" value={formData.price || ''} onChange={e => setFormData({...formData, price: Number(e.target.value)})} /></div>
+                    <div className="pro-input-group"><label>Class ID</label><input type="number" value={formData.subcategory_id || ''} onChange={e => setFormData({...formData, subcategory_id: Number(e.target.value)})} /></div>
+                 </div>
+               )}
+
+               {activeTab === 'drug classes' && (
+                 <div className="pro-input-group"><label>Category Parent ID (Drugs=1)</label><input type="number" value={formData.category_id || ''} onChange={e => setFormData({...formData, category_id: Number(e.target.value)})} /></div>
+               )}
+
+               <button type="submit" className="pro-save-btn" disabled={loading}>
+                 {loading ? 'Processing...' : <><Check size={20} /> Update SkieZ Core</>}
+               </button>
             </form>
           </div>
         </div>

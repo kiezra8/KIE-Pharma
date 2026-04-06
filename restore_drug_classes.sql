@@ -12,8 +12,13 @@ BEGIN
   END IF;
 END $$;
 
--- 2. DELETE BROKEN/OLD CATEGORIES (Dental & Nursing)
+-- 2. DELETE BROKEN/OLD/DUPLICATE CATEGORIES
 DELETE FROM categories WHERE name IN ('Dental', 'Nursing');
+
+-- De-duplicate by name (keep only the record with the lowest ID)
+DELETE FROM categories a 
+USING categories b 
+WHERE a.id > b.id AND a.name = b.name;
 
 -- 3. ENSURE PARENT "DRUGS" CATEGORY EXISTS (ID 1)
 INSERT INTO categories (id, name, img) VALUES 
