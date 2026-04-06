@@ -5,12 +5,13 @@ import './ProductDetail.css';
 
 export default function ProductDetail({ product, onClose }) {
   const { addToCart } = useCart();
-  const [activeImage, setActiveImage] = useState(product.imageurl || product.image);
+  const imgUrl = product.imageurl || product.image || "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600";
+  const [activeImage, setActiveImage] = useState(imgUrl);
   
   // Fake gallery for visuals if not provided by Supabase yet
   const gallery = product.gallery?.length ? product.gallery : [
-    product.imageurl || product.image,
-    "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600",
+    imgUrl,
+    "https://images.unsplash.com/photo-1603398938378-e54eab446ddd?auto=format&fit=crop&q=80&w=600",
     "https://images.unsplash.com/photo-1576091160550-217359f49f4c?auto=format&fit=crop&q=80&w=600"
   ];
 
@@ -44,7 +45,7 @@ export default function ProductDetail({ product, onClose }) {
         {/* Info Section */}
         <div className="info-container">
           <div className="price-row">
-            <h2>Ugshs {Number(product.price).toLocaleString()}</h2>
+            <h2>Ugshs {Number(product.price || 0).toLocaleString()}</h2>
             {product.badge && <span className="flash-sale-badge">{product.badge}</span>}
           </div>
           

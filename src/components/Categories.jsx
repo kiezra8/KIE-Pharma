@@ -144,7 +144,6 @@ export default function Categories({ isPage, onToggle }) {
                 </div>
                 <div className="sub-card-info">
                   <h4>{sub.name}</h4>
-                  <p>{sub.desc}</p>
                   <ChevronRight size={16} />
                 </div>
               </div>

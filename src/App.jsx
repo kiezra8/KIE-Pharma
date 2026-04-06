@@ -53,13 +53,7 @@ function AppContent() {
           {!isCategoryOpen && (
             <>
               <ProductGrid title="Essential & Trending" products={trendingProducts} />
-              <div className="banner-small">
-                <div className="banner-text">
-                  <h3>KIE PHARMA DELIVERY</h3>
-                  <p>Swift pharmaceutical and medical supply delivery across Uganda within 24 hours.</p>
-                </div>
-              </div>
-              <ProductGrid title="Surgical & Consumables" products={generalProducts} />
+              <ProductGrid title="All Products" products={generalProducts} />
             </>
           )}
         </>

@@ -1,6 +1,7 @@
 :root {
   --primary: #222222;
   --accent: #FF4D8D;
+  --primary-gradient-logo: linear-gradient(90deg, #ff6b6b, #ff4d8d, #222222);
   --text-main: #222222;
   --text-muted: #999999;
   --bg-main: #ffffff;
