@@ -121,7 +121,7 @@ function AppContent() {
 
   return (
     <div className="container">
-      <Header onSearch={setSearchQuery} />
+      <Header onSearch={setSearchQuery} isAdmin={isAdmin} />
       <main className="main-content">{renderContent()}</main>
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>

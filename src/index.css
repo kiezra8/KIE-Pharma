@@ -180,26 +180,38 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* LIVE ADMIN CONTROLS */
+.admin-status-pill {
+  background: #FF4D8D;
+  color: #fff;
+  font-size: 8px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+  box-shadow: 0 4px 10px rgba(255, 77, 141, 0.4);
+}
+
 .quick-edit-img-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(18, 20, 24, 0.8);
-  backdrop-filter: blur(8px);
+  top: 15px; /* Moved down slightly */
+  right: 15px;
+  background: #121418; /* Solid background for visibility */
   color: #fff;
   border: none;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 800;
-  z-index: 100;
+  padding: 10px 18px; /* Bigger padding */
+  border-radius: 14px;
+  font-size: 13px; /* Bigger font */
+  font-weight: 900;
+  z-index: 1000;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.quick-edit-img-btn:active { transform: scale(0.9); }
 
 .quick-edit-img-btn.small {
   padding: 6px;

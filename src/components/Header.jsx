@@ -17,7 +17,7 @@ export default function Header({ onSearch }) {
     <header className="header">
       <div className="header-top">
         <div className="logo" onClick={() => window.location.reload()}>
-          SkieZ Pharma
+          SkieZ Pharma {isAdmin && <span className="admin-status-pill">ADMIN MODE</span>}
         </div>
         <div className="header-icons">
           <div className="wishlist-header-icon">

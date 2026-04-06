@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ArrowLeft, Camera } from 'lucide-react';
+import { ChevronRight, ArrowLeft, Camera, Plus } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import ProductGrid from './ProductGrid';
 import { pickAndUploadImage } from '../utils/imageUtils';
 import './Categories.css';
 
-const HARDCODED_CATEGORIES = [
+// 100% INSTANT-ON CATEGORIES (Like suit-up.pages.dev)
+const HARDCODED_DATA = [
   { id: 1, name: "Drugs", img: "https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg" },
   { id: 2, name: "Consumables", img: "https://i.pinimg.com/1200x/de/14/de/de14de238d3b3aa763fba68c0d02db2a.jpg" },
   { id: 3, name: "Surgical", img: "https://images.unsplash.com/photo-1584622781564-1d9876a3e75d?auto=format&fit=crop&q=80&w=300" },
@@ -21,43 +22,42 @@ const HARDCODED_CATEGORIES = [
 export default function Categories({ isPage, onToggle, isAdmin }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedSub, setSelectedSub] = useState(null);
-  const [categories, setCategories] = useState(HARDCODED_CATEGORIES);
+  const [categories, setCategories] = useState(HARDCODED_DATA);
   const [subcategories, setSubcategories] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [sync, setSync] = useState(0);
 
+  // FETCH SUPPLEMENTAL DATA (Classes & Products)
   useEffect(() => {
-    async function fetchData() {
-      const { data: cats } = await supabase.from('categories').select('*');
+    async function fetchInventory() {
       const { data: subs } = await supabase.from('subcategories').select('*');
       const { data: prods } = await supabase.from('products').select('*');
+      const { data: cats } = await supabase.from('categories').select('*');
       
-      if (cats && cats.length > 0) {
-        // Overlay Supabase images/names over hardcoded ones if modified
-        const merged = HARDCODED_CATEGORIES.map(h => {
-             const found = cats.find(c => Number(c.id) === h.id || c.name === h.name);
-             return found ? { ...h, ...found } : h;
-        });
-        setCategories(merged);
-      }
       if (subs) setSubcategories(subs);
       if (prods) setAllProducts(prods);
+      
+      // Merge custom category changes (like new images) if available in DB
+      if (cats && cats.length > 0) {
+        setCategories(prev => {
+          return prev.map(p => {
+             const found = cats.find(c => c.name === p.name || Number(c.id) === p.id);
+             return found ? { ...p, ...found } : p;
+          });
+        });
+      }
     }
-    fetchData();
+    fetchInventory();
   }, [sync]);
 
   const handleQuickSwap = async (e, item, table) => {
     e.stopPropagation();
     const url = await pickAndUploadImage();
     if (url) {
-       await supabase.from(table).update({ img: url }).eq('id', item.id);
+       const field = (table === 'products') ? 'image' : 'img';
+       await supabase.from(table).update({ [field]: url }).eq('id', item.id);
        setSync(s => s + 1);
     }
-  };
-
-  const handleCategoryClick = (cat) => {
-    setActiveCategory(cat);
-    if (onToggle) onToggle(true);
   };
 
   const handleAddCategory = async () => {
@@ -66,9 +66,20 @@ export default function Categories({ isPage, onToggle, isAdmin }) {
     await supabase.from('categories').insert([{ name, img: url }]);
     setSync(s => s + 1);
   };
+
+  const handleCategoryClick = (cat) => {
+    setActiveCategory(cat);
+    if (onToggle) onToggle(true);
+  };
+
+  const backToMain = (e) => { 
+    if (e) e.stopPropagation(); 
+    setActiveCategory(null); setSelectedSub(null); 
+    if (onToggle) onToggle(false);
+  };
   
   if (selectedSub) {
-    const classProducts = allProducts.filter(p => p.subcategory_id === selectedSub.id);
+    const classProducts = allProducts.filter(p => Number(p.subcategory_id) === Number(selectedSub.id));
     return (
       <div className="categories-page-wrapper">
         <button className="back-line-btn" onClick={() => setSelectedSub(null)}>
@@ -80,8 +91,8 @@ export default function Categories({ isPage, onToggle, isAdmin }) {
   }
 
   if (activeCategory) {
-    if (activeCategory.name === 'Drugs') {
-        const subcats = subcategories.filter(s => s.category_id === activeCategory.id || s.category_id === 1);
+    if (activeCategory.name.toLowerCase() === 'drugs') {
+        const subcats = subcategories.filter(s => Number(s.category_id) === Number(activeCategory.id) || Number(s.category_id) === 1);
         return (
           <div className="categories-page-wrapper">
             <button className="back-line-btn" onClick={backToMain}><ArrowLeft size={18} /> Back</button>
@@ -100,7 +111,7 @@ export default function Categories({ isPage, onToggle, isAdmin }) {
           </div>
         );
     } else {
-        const catProducts = allProducts.filter(p => p.category_id === activeCategory.id);
+        const catProducts = allProducts.filter(p => Number(p.category_id) === Number(activeCategory.id));
         return (
           <div className="categories-page-wrapper">
             <button className="back-line-btn" onClick={backToMain}><ArrowLeft size={18} /> Back</button>
@@ -114,16 +125,16 @@ export default function Categories({ isPage, onToggle, isAdmin }) {
     return (
       <div className="categories-page-wrapper">
         <div className="section-header">
-            <h3 className="section-title">Store Catalog</h3>
-            {isAdmin && <button className="in-app-add-btn" onClick={handleAddCategory}><Plus size={16}/> New Category</button>}
+            <h3 className="section-title">Departments</h3>
+            {isAdmin && <button className="in-app-add-btn" onClick={handleAddCategory}><Plus size={16}/> New Dept</button>}
         </div>
         <div className="categories-list">
           {categories.map(cat => (
             <div key={cat.id} className="category-list-item-premium fade-in" onClick={() => handleCategoryClick(cat)}>
               <img src={cat.img} alt={cat.name} className="cat-list-img" />
-              {isAdmin && <button className="quick-edit-img-btn card-style" onClick={(e) => handleQuickSwap(e, cat, 'categories')}><Camera size={16}/> Edit Image</button>}
+              {isAdmin && <button className="quick-edit-img-btn card-style" onClick={(e) => handleQuickSwap(e, cat, 'categories')}><Camera size={16}/> Edit</button>}
               <div className="category-list-overlay">
-                <div className="category-list-content"><h4>{cat.name}</h4><p>Explore {cat.name}</p></div>
+                <div className="category-list-content"><h4>{cat.name}</h4><p>Browse Stock</p></div>
                 <ChevronRight size={24} />
               </div>
             </div>
@@ -136,7 +147,7 @@ export default function Categories({ isPage, onToggle, isAdmin }) {
   return (
     <div className="categories-wrapper">
       <section className="categories-section">
-        <div className="section-header"><h3 className="section-title">Explore Store</h3></div>
+        <div className="section-header"><h3 className="section-title">Shop by Category</h3></div>
         <div className="categories-scroll-container">
           {categories.map(cat => (
             <div key={cat.id} className="category-item-circular" onClick={() => handleCategoryClick(cat)}>
