@@ -99,22 +99,21 @@ export default function Account({ onAdminClick }) {
       <div className="profile-header">
         <h2>My Profile</h2>
         <p>Logged in as: <strong>{userEmail}</strong></p>
-        {isAdmin && <span className="admin-tag">Admin Account</span>}
+        {isAdmin && (
+          <div className="admin-status-banner">
+             <h4>SkieZ Management Active</h4>
+             <p>All in-app EDIT and ADD buttons are now unlocked across Home & Categories.</p>
+          </div>
+        )}
       </div>
       
       <div className="profile-actions">
         <button className="profile-btn">View Order History</button>
         <button className="profile-btn">Saved Items</button>
         <button className="profile-btn">Facility Details</button>
-        
-        {isAdmin && (
-           <button onClick={onAdminClick} className="profile-btn admin-highlight">
-              Go to Admin Dashboard 
-           </button>
-        )}
       </div>
 
-      <button onClick={handleLogout} className="logout-btn">Log Out</button>
+      <button onClick={handleLogout} className="logout-btn">Log Out Account</button>
     </div>
   );
 }

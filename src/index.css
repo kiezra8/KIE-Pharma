@@ -179,6 +179,56 @@ a { text-decoration: none; color: inherit; }
   100% { transform: translateX(100%); }
 }
 
+/* LIVE ADMIN MODAL */
+.pro-live-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 20, 24, 0.7);
+  backdrop-filter: blur(12px);
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pro-live-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 36px;
+  padding: 30px;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.modal-top h3 { font-size: 19px; font-weight: 900; color: #121418; }
+.modal-top button { background: none; border: none; opacity: 0.4; cursor: pointer; }
+
+.edit-img-slot { width: 100%; aspect-ratio: 4/3; border-radius: 24px; overflow: hidden; position: relative; margin-bottom: 25px; cursor: pointer; border: 2px dashed #eee; background: #f8f9fa; }
+.edit-img-slot img { width: 100%; height: 100%; object-fit: cover; }
+.img-slot-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 14px; gap: 10px; opacity: 0; transition: 0.2s; }
+.edit-img-slot:hover .img-slot-overlay { opacity: 1; }
+
+.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.input-group label { font-size: 13px; font-weight: 800; color: #636E72; }
+.input-group input { padding: 14px 20px; border-radius: 14px; border: 1.5px solid #F1F2F6; font-size: 15px; font-weight: 700; outline: none; }
+.input-group input:focus { border-color: #FF4D8D; }
+
+.modal-actions { display: grid; grid-template-columns: 1fr 60px; gap: 15px; margin-top: 10px; }
+.save-live-btn { background: #FF4D8D; color: #fff; border: none; padding: 16px; border-radius: 16px; font-weight: 900; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 30px rgba(255, 77, 141, 0.3); }
+.del-live-btn { background: #F8F9FA; color: #ef4444; border: none; border-radius: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+.admin-status-pill {
+  background: #FF4D8D;
+  color: #fff;
+  font-size: 8px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+}
+
 /* LIVE ADMIN CONTROLS */
 .admin-status-pill {
   background: #FF4D8D;

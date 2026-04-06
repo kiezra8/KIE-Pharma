@@ -6,7 +6,6 @@ import Categories from './components/Categories';
 import ProductGrid from './components/ProductGrid';
 import BottomNav from './components/BottomNav';
 import Cart from './components/Cart';
-import Admin from './components/Admin';
 import Account from './components/Account';
 import { supabase } from './supabaseClient';
 
@@ -85,8 +84,7 @@ function AppContent() {
     switch (activeTab) {
       case 'cart': return <Cart isAdmin={isAdmin} />;
       case 'categories': return <Categories isPage={true} onToggle={setIsCategoryOpen} isAdmin={isAdmin} />;
-      case 'admin': return <Admin />;
-      case 'account': return <Account onAdminClick={() => setActiveTab('admin')} />;
+      case 'account': return <Account />;
       default: return (
         <>
           {!isCategoryOpen && <HeroSlider isAdmin={isAdmin} />}
