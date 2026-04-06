@@ -83,7 +83,7 @@ function AppContent() {
     <div className="container">
       <Header />
       <main className="main-content">{renderContent()}</main>
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      {activeTab !== 'admin' && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
     </div>
   );
 }
