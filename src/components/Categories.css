@@ -15,19 +15,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   cursor: pointer;
   width: 100%;
+  min-width: 0; /* Prevents long labels from expanding grid cell */
 }
 
 .category-circle-img {
   width: 100%;
+  max-width: 62px; /* Uniform max size for all icons */
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
-  background: #f8f8f8;
-  border: 1px solid #f0f0f0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: #fff;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
 .cat-img-grid {
@@ -38,13 +40,14 @@
 
 .category-label {
   font-size: 10px;
-  color: #222;
+  color: #333;
   font-weight: 500;
   text-align: center;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
+  padding: 0 2px;
 }
 
 /* Page Styles (When categories-tab is active) */

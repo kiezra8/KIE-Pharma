@@ -2,29 +2,26 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: 1000;
-  background: #fffffff2;
+  background: var(--primary-gradient);
   width: 100%;
-  padding: 10px 15px;
+  padding: 12px 15px;
   transition: all .3s;
   position: sticky;
   top: 0;
-  box-shadow: 0 2px 10px #0000000d;
+  box-shadow: 0 4px 20px rgba(255, 77, 141, 0.2);
 }
 
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .logo {
-  background: var(--primary-gradient-logo);
-  -webkit-text-fill-color: transparent;
+  color: #fff;
   cursor: pointer;
-  -webkit-background-clip: text;
-  background-clip: text;
   flex-shrink: 0;
   font-size: 22px;
   font-weight: 800;
@@ -32,8 +29,8 @@
 }
 
 .search-bar {
-  background: #f5f5f5;
-  border: 2px solid #0000;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 20px;
   flex: 1;
   align-items: center;
@@ -44,10 +41,9 @@
 }
 
 .search-bar:focus-within {
-  background: #fff;
-  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 0 0 4px #ff6b6b1a;
 }
 
 .search-bar input {
@@ -57,10 +53,11 @@
   flex: 1;
   margin-left: 10px;
   font-size: 14px;
+  color: #fff !important;
 }
 
 .search-bar input::placeholder {
-  color: #999;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .header-icons {
@@ -70,7 +67,7 @@
 }
 
 .wishlist-header-icon, .account-header-icon {
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -80,7 +77,7 @@
   display: flex;
   position: relative;
   cursor: pointer;
-  color: #333;
+  color: #fff;
 }
 
 .wishlist-header-icon:hover, .account-header-icon:hover {

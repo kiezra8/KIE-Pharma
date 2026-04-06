@@ -106,7 +106,7 @@
 
 .btn-add-cart {
   color: #fff;
-  background: #222;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   border: none;
   border-radius: 6px;
   flex: 1;
@@ -116,10 +116,12 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
 }
 
 .btn-add-cart:active {
-  background: #000;
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
 .btn-add-cart:active {

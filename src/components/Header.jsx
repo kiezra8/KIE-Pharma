@@ -14,17 +14,17 @@ export default function Header() {
         </div>
         <div className="header-icons">
           <div className="wishlist-header-icon">
-            <Heart size={20} strokeWidth={2.5} />
+            <Heart size={20} color="#fff" strokeWidth={2.5} />
           </div>
           <div className="account-header-icon">
-            <Bell size={20} strokeWidth={2.5} />
+            <Bell size={20} color="#fff" strokeWidth={2.5} />
             {cartCount > 0 && <span className="wishlist-badge">{cartCount}</span>}
           </div>
         </div>
       </div>
       <div className="search-bar">
-        <Search size={18} color="#999" />
-        <input type="text" placeholder="Search medical supplies..." readOnly />
+        <Search size={18} color="#fff" />
+        <input type="text" placeholder="Search medical supplies..." style={{color: '#fff'}} readOnly />
       </div>
     </header>
   );
