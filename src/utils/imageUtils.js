@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabase } from '../supabaseClient';
 
 export const pickAndUploadImage = async () => {
     return new Promise((resolve) => {
