@@ -39,6 +39,7 @@ function AppContent() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [allProductsRaw, setAllProductsRaw] = useState(defaultGeneral);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAppLoading, setIsAppLoading] = useState(true);
 
   const trendingProducts = allProductsRaw.filter(p => 
     (['Hot', 'Trending', 'New'].includes(p.badge)) && 
@@ -50,9 +51,18 @@ function AppContent() {
   );
 
   React.useEffect(() => {
-    supabase.from('products').select('*').then(({ data }) => {
-      if (data && data.length > 0) setAllProductsRaw(data);
-    });
+    async function initCatalog() {
+      try {
+        const { data } = await supabase.from('products').select('*');
+        if (data && data.length > 0) setAllProductsRaw(data);
+      } catch (err) {
+        console.error("Catalog Init Error:", err);
+      } finally {
+        // Minimum 1.5s for the brand splash feel
+        setTimeout(() => setIsAppLoading(false), 1500);
+      }
+    }
+    initCatalog();
   }, []);
 
   React.useEffect(() => {
@@ -62,6 +72,23 @@ function AppContent() {
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab, isCategoryOpen]);
+
+  if (isAppLoading) {
+    return (
+      <div className="splash-screen">
+        <div className="splash-content">
+          <div className="splash-icon-wrapper">
+             <img src="https://i.pinimg.com/736x/dc/c7/36/dcc73645645065ebee4fba4297c7e937.jpg" alt="SkieZ" />
+          </div>
+          <h1>SKIEZ PHARMA</h1>
+          <p>UGANDA'S TRUSTED PARTNER</p>
+          <div className="splash-progress">
+             <div className="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const renderContent = () => {
     switch (activeTab) {
