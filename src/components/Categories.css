@@ -4,30 +4,30 @@
   margin-bottom: 8px;
 }
 
-.categories-grid-home {
+.categories-scroll-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 16px 8px;
-  padding: 10px 0;
+  gap: 12px 6px;
+  padding: 10px 12px;
 }
 
-.category-item-premium {
+.category-item-circular {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   width: 100%;
 }
 
-.category-icon-bg {
+.category-circle-img {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 16px; /* A bit square, a bit round (squircle) */
+  border-radius: 50%;
   overflow: hidden;
   background: #f8f8f8;
   border: 1px solid #f0f0f0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .cat-img-grid {
@@ -37,11 +37,14 @@
 }
 
 .category-label {
-  font-size: 11px;
+  font-size: 10px;
   color: #222;
   font-weight: 500;
   text-align: center;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 /* Page Styles (When categories-tab is active) */
@@ -67,11 +70,12 @@
 .category-list-item-premium {
   position: relative;
   width: 100%;
-  height: 120px;
-  border-radius: 4px;
+  height: 140px;
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* SuitUp luxury depth */
 }
 
 .cat-list-img {

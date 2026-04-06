@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Heart, ShoppingBag, Share2, Star } from 'lucide-react';
+import { ArrowLeft, Heart, ShoppingBag, Share2, Star, Truck, ShieldCheck, RefreshCcw } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import './ProductDetail.css';
 
@@ -8,7 +8,6 @@ export default function ProductDetail({ product, onClose }) {
   const imgUrl = product.imageurl || product.image || "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600";
   const [activeImage, setActiveImage] = useState(imgUrl);
   
-  // Fake gallery for visuals if not provided by Supabase yet
   const gallery = product.gallery?.length ? product.gallery : [
     imgUrl,
     "https://images.unsplash.com/photo-1603398938378-e54eab446ddd?auto=format&fit=crop&q=80&w=600",
@@ -17,75 +16,96 @@ export default function ProductDetail({ product, onClose }) {
 
   return (
     <div className="product-detail-modal slide-up">
-      <div className="detail-header">
+      <div className="detail-header-jumia">
         <button className="back-btn" onClick={onClose}><ArrowLeft size={24} /></button>
-        <div className="header-actions">
-          <button className="icon-btn"><Share2 size={20} /></button>
-          <button className="icon-btn"><Heart size={20} /></button>
-        </div>
+        <span className="header-title-jumia">Details</span>
+        <button className="icon-btn-transparent"><Share2 size={24} /></button>
       </div>
 
-      <div className="detail-content">
+      <div className="detail-content-jumia">
         {/* Gallery Section */}
-        <div className="gallery-container">
+        <div className="gallery-container-jumia">
+          <div className="wishlist-float-jumia">
+            <Heart size={20} color="#f68b1e" />
+          </div>
           <img src={activeImage} alt={product.name} className="main-gallery-img" />
-          <div className="gallery-thumbnails">
+          <div className="gallery-dots-jumia">
             {gallery.map((img, idx) => (
-              <img 
+              <span 
                 key={idx} 
-                src={img} 
-                alt="Thumbnail" 
-                className={`thumbnail ${activeImage === img ? 'active' : ''}`}
+                className={`jumia-dot ${activeImage === img ? 'active' : ''}`}
                 onClick={() => setActiveImage(img)}
               />
             ))}
           </div>
         </div>
 
-        {/* Info Section */}
-        <div className="info-container">
-          <div className="price-row">
-            <h2>Ugshs {Number(product.price || 0).toLocaleString()}</h2>
-            {product.badge && <span className="flash-sale-badge">{product.badge}</span>}
+        {/* Info Section Jumia */}
+        <div className="info-container-jumia">
+          <div className="jumia-title-block">
+            <h1 className="product-title-jumia">{product.name}</h1>
+            <div className="rating-row-jumia">
+              <div className="stars">
+                <Star size={14} fill="#f68b1e" color="#f68b1e" />
+                <Star size={14} fill="#f68b1e" color="#f68b1e" />
+                <Star size={14} fill="#f68b1e" color="#f68b1e" />
+                <Star size={14} fill="#f68b1e" color="#f68b1e" />
+                <Star size={14} fill="#f68b1e" color="#e0e0e0" />
+                <span className="rating-text-jumia">120 verified ratings</span>
+              </div>
+            </div>
+            <div className="price-row-jumia">
+              <h2>UGX {Number(product.price || 0).toLocaleString()}</h2>
+              {product.badge && <span className="jumia-badge-express">KIE EXPRESS</span>}
+            </div>
           </div>
           
-          <h1 className="product-title">{product.name}</h1>
-          
-          <div className="rating-row">
-            <div className="stars">
-              <Star size={14} fill="#ffc107" color="#ffc107" />
-              <Star size={14} fill="#ffc107" color="#ffc107" />
-              <Star size={14} fill="#ffc107" color="#ffc107" />
-              <Star size={14} fill="#ffc107" color="#ffc107" />
-              <Star size={14} fill="#ffc107" color="#ffc107" />
-              <span>(4.9)</span>
-            </div>
-            <span className="sold-count">1.2k+ Sold</span>
+          <div className="jumia-section-divider"></div>
+
+          <div className="jumia-delivery-block">
+             <h3 className="jumia-block-title">DELIVERY & RETURNS</h3>
+             
+             <div className="jumia-delivery-item">
+               <div className="jumia-delivery-icon-box"><Truck size={20} color="#f68b1e" /></div>
+               <div className="delivery-text">
+                 <h4>Door Delivery</h4>
+                 <p>Delivery Fees UGX 3,000</p>
+               </div>
+             </div>
+             
+             <div className="jumia-delivery-item">
+               <div className="jumia-delivery-icon-box"><RefreshCcw size={20} color="#f68b1e" /></div>
+               <div className="delivery-text">
+                 <h4>Return Policy</h4>
+                 <p>Free return within 7 days for eligible items.</p>
+               </div>
+             </div>
+             
+             <div className="jumia-delivery-item">
+               <div className="jumia-delivery-icon-box"><ShieldCheck size={20} color="#f68b1e" /></div>
+               <div className="delivery-text">
+                 <h4>Warranty</h4>
+                 <p>100% Authentic items guaranteed by SkieZ.</p>
+               </div>
+             </div>
           </div>
 
-          {/* Shein-style Accordion/Specs */}
-          <div className="specs-section">
-            <div className="spec-row">
-              <span className="spec-label">Shipping</span>
-              <span className="spec-value">Express Delivery (24hrs)</span>
-            </div>
-            <div className="spec-row">
-              <span className="spec-label">Returns</span>
-              <span className="spec-value">7 Days Free Return if sealed</span>
-            </div>
-          </div>
+          <div className="jumia-section-divider"></div>
 
-          <div className="description-section">
-            <h3>Product Description</h3>
-            <p>{product.description || product.desc || 'High-quality medical supplies guaranteed by SkieZ Pharma. Sterilized and verified for immediate clinical application.'}</p>
+          <div className="jumia-description-block">
+            <h3 className="jumia-block-title">PRODUCT DETAILS</h3>
+            <div className="jumia-desc-text">
+              <p>{product.description || product.desc || 'High-quality medical supplies guaranteed by SkieZ Pharma. Sterilized and verified for immediate clinical application.'}</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="bottom-action-bar">
-        <button className="add-to-cart-btn" onClick={() => { addToCart(product); onClose(); }}>
-          <ShoppingBag size={20} />
+      <div className="bottom-action-bar-jumia">
+        <button className="icon-action-jumia"><Share2 size={20} color="#666" /></button>
+        <button className="add-to-cart-jumia" onClick={() => { addToCart(product); onClose(); }}>
+          <ShoppingBag size={18} />
           ADD TO CART
         </button>
       </div>

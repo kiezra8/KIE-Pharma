@@ -1,13 +1,14 @@
 :root {
   --primary: #222222;
-  --accent: #FF4D8D;
+  --accent: #ff6b6b;
+  --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff4d8d 100%);
   --primary-gradient-logo: linear-gradient(90deg, #ff6b6b, #ff4d8d, #222222);
   --text-main: #222222;
-  --text-muted: #999999;
+  --text-muted: #888888;
   --bg-main: #ffffff;
-  --bg-offset: #ffffff;
-  --border-light: #eeeeee;
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif;
+  --bg-offset: #f9f9f9;
+  --border-light: #f0f0f0;
+  --font-main: 'Outfit', 'Inter', sans-serif;
   --header-height: 100px;
   --nav-height: 60px;
 }
@@ -36,6 +37,7 @@ body {
 
 html {
   scroll-behavior: smooth;
+  background: #f9f9f9;
 }
 
 ::-webkit-scrollbar {

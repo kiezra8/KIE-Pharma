@@ -40,6 +40,11 @@ function AppContent() {
     if (activeTab !== 'home') setIsCategoryOpen(false);
   }, [activeTab]);
 
+  // Scroll to top whenever tab changes or category opens
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab, isCategoryOpen]);
+
   const renderContent = () => {
     switch (activeTab) {
       case 'cart': return <Cart />;

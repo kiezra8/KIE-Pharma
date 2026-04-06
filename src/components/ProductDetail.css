@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: #f5f5f5; /* Jumia soft gray bg dividing sections */
   z-index: 1000;
   overflow-y: auto;
   display: flex;
@@ -20,199 +20,252 @@
   to { transform: translateY(0); }
 }
 
-.detail-header {
-  position: absolute;
+.detail-header-jumia {
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
-  background: linear-gradient(rgba(0,0,0,0.4), transparent);
+  z-index: 100;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.back-btn, .icon-btn {
-  background: rgba(255, 255, 255, 0.8);
+.header-title-jumia {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.back-btn, .icon-btn-transparent {
+  background: none;
   border: none;
-  border-radius: 50%;
   width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   color: #333;
 }
 
-.header-actions {
-  display: flex;
-  gap: 10px;
+.detail-content-jumia {
+  background: #fff;
+  padding-bottom: 90px;
 }
 
-.gallery-container {
+.gallery-container-jumia {
   width: 100%;
   position: relative;
+  background: #fff;
+}
+
+.wishlist-float-jumia {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
 }
 
 .main-gallery-img {
   width: 100%;
-  height: 400px;
-  object-fit: cover;
+  height: 350px;
+  object-fit: contain;
+  background: #fff;
 }
 
-.gallery-thumbnails {
+.gallery-dots-jumia {
   display: flex;
-  gap: 10px;
-  padding: 15px;
-  overflow-x: auto;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
 }
 
-.thumbnail {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  object-fit: cover;
-  border: 2px solid transparent;
+.jumia-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 50%;
   cursor: pointer;
 }
 
-.thumbnail.active {
-  border-color: #ff6b6b;
+.jumia-dot.active {
+  background: #f68b1e; /* Jumia Orange */
 }
 
-.info-container {
-  padding: 20px;
-  padding-bottom: 90px; /* space for bottom bar */
+.jumia-title-block {
+  padding: 15px;
+  background: #fff;
 }
 
-.price-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.price-row h2 {
-  font-size: 26px;
-  font-weight: 800;
-  color: #ff6b6b;
-}
-
-.flash-sale-badge {
-  background: #ffdbdb;
-  color: #ff4747;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.product-title {
-  font-size: 18px;
-  font-weight: 700;
+.product-title-jumia {
+  font-size: 16px;
+  font-weight: 500;
   color: #222;
-  margin-bottom: 12px;
   line-height: 1.4;
+  margin-bottom: 10px;
 }
 
-.rating-row {
+.rating-row-jumia {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .stars {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
+}
+
+.rating-text-jumia {
   font-size: 12px;
-  font-weight: 600;
-  color: #666;
+  color: #0056b3;
+  margin-left: 8px;
 }
 
-.sold-count {
-  font-size: 13px;
-  color: #888;
-  background: #f5f5f5;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-.specs-section {
-  background: #f8f9fa;
-  border-radius: 16px;
-  padding: 15px;
-  margin-bottom: 25px;
-}
-
-.spec-row {
+.price-row-jumia {
   display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 }
 
-.spec-row:last-child {
-  border-bottom: none;
+.price-row-jumia h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #222;
 }
 
-.spec-label {
-  color: #666;
-  font-size: 13px;
-  font-weight: 600;
+.jumia-badge-express {
+  background: #000;
+  color: #f68b1e;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.5px;
 }
 
-.spec-value {
-  color: #111;
+.jumia-section-divider {
+  width: 100%;
+  height: 8px;
+  background: #f5f5f5;
+}
+
+.jumia-delivery-block, .jumia-description-block {
+  padding: 15px;
+  background: #fff;
+}
+
+.jumia-block-title {
   font-size: 13px;
   font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.description-section h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
+.jumia-delivery-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
-.description-section p {
-  color: #666;
+.jumia-delivery-item:last-child {
+  margin-bottom: 0;
+}
+
+.jumia-delivery-icon-box {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.delivery-text h4 {
   font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.delivery-text p {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.jumia-desc-text p {
+  font-size: 14px;
+  color: #333;
   line-height: 1.6;
 }
 
-.bottom-action-bar {
+.bottom-action-bar-jumia {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 15px;
   background: #fff;
-  box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
   display: flex;
-  gap: 15px;
+  gap: 10px;
   z-index: 100;
 }
 
-.add-to-cart-btn {
-  flex: 1;
-  background: #333; /* Shein style dark button */
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 15px;
-  font-size: 15px;
-  font-weight: 800;
+.icon-action-jumia {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 44px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
   cursor: pointer;
 }
 
-.add-to-cart-btn:active {
-  transform: scale(0.98);
+.add-to-cart-jumia {
+  flex: 1;
+  background: #f68b1e; /* Classic Jumia Orange */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(246, 139, 30, 0.3);
+}
+
+.add-to-cart-jumia:active {
+  transform: translateY(2px);
+  box-shadow: none;
 }
