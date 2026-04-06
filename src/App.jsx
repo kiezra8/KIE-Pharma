@@ -64,8 +64,8 @@ function AppContent() {
               <ProductGrid title="Essential & Trending" products={trendingProducts} />
               <div className="banner-small">
                 <div className="banner-text">
-                  <h3>SkieZ Delivery</h3>
-                  <p>Express pharmaceutical delivery across Uganda within 24hrs.</p>
+                  <h3>KIE PHARMA DELIVERY</h3>
+                  <p>Swift pharmaceutical and medical supply delivery across Uganda within 24 hours.</p>
                 </div>
               </div>
               <ProductGrid title="Surgical & Consumables" products={generalProducts} />

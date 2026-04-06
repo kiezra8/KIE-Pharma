@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Heart, User, Bell } from 'lucide-react';
+import { Search, ShoppingBag, User, Heart, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import './Header.css';
 
@@ -8,23 +8,29 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="header-top">
-        <div className="logo">
-          SkieZ
-        </div>
-        <div className="header-icons">
-          <div className="wishlist-header-icon">
-            <Heart size={20} strokeWidth={2.5} />
+      <div className="header-inner">
+        <div className="header-topline">
+          <div className="header-left">
+            <MessageCircle size={22} strokeWidth={1.5} />
           </div>
-          <div className="account-header-icon">
-            <Bell size={20} strokeWidth={2.5} />
-            {cartCount > 0 && <span className="wishlist-badge">{cartCount}</span>}
+          <div className="logo-container">
+            <h1 className="logo-text">KIE PHARMA</h1>
+          </div>
+          <div className="header-right">
+            <User size={22} strokeWidth={1.5} />
+            <div className="cart-icon-wrapper">
+              <ShoppingBag size={22} strokeWidth={1.5} />
+              {cartCount > 0 && <span className="cart-count-badge">{cartCount}</span>}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="search-bar">
-        <Search size={18} color="#999" />
-        <input type="text" placeholder="Search medical supplies..." readOnly />
+        <div className="header-search-container">
+          <div className="search-bar-shein">
+            <Search size={18} className="search-icon-shein" />
+            <input type="text" placeholder="Search for medical products..." className="search-input-shein" />
+            <div className="search-tags-hint">Masks, Gloves...</div>
+          </div>
+        </div>
       </div>
     </header>
   );

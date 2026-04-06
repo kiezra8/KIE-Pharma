@@ -34,7 +34,7 @@ export default function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % banners.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -44,10 +44,6 @@ export default function HeroSlider() {
         {banners.map((item, i) => (
           <div key={item.id} className={`banner ${i === index ? 'active' : ''}`}>
             <img src={item.img} alt={item.title} />
-            <div className="banner-overlay">
-              <h3>{item.title}</h3>
-              <p>{item.subtitle}</p>
-            </div>
           </div>
         ))}
         <div className="banner-dots">
