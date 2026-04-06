@@ -10,7 +10,7 @@ export default function Header() {
     <header className="header">
       <div className="header-top">
         <div className="logo">
-          SkieZ
+          SkieZ Pharma
         </div>
         <div className="header-icons">
           <div className="wishlist-header-icon">

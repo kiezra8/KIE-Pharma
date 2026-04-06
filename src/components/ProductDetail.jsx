@@ -76,7 +76,7 @@ export default function ProductDetail({ product, onClose }) {
 
           <div className="description-section">
             <h3>Product Description</h3>
-            <p>{product.description || 'High-quality medical supplies guaranteed by SkieZ Pharma. Sterilized and verified for immediate clinical application.'}</p>
+            <p>{product.description || product.desc || 'High-quality medical supplies guaranteed by SkieZ Pharma. Sterilized and verified for immediate clinical application.'}</p>
           </div>
         </div>
       </div>
