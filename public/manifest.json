@@ -1,0 +1,20 @@
+{
+  "short_name": "SkieZ Pharma",
+  "name": "SkieZ Pharma | Africa's Premier Medical Store",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "theme_color": "#FF4D8D"
+}

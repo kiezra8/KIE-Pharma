@@ -81,6 +81,98 @@ export default function Admin() {
     );
   }
 
+  const pickAndUploadImage = async () => {
+    return new Promise((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      // Do not use the 'capture' attribute, so that the mobile device prioritizes the gallery picker over the camera
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return resolve(null);
+        
+        try {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}_${Math.random()}.${fileExt}`;
+          const filePath = `${fileName}`;
+
+          alert("Uploading image to storage... Please wait.");
+          const { error } = await supabase.storage.from('app_images').upload(filePath, file);
+          
+          if (error) {
+            alert("Upload Error: Check if 'app_images' bucket exists and is public. Error: " + error.message);
+            return resolve(null);
+          }
+          
+          const { data: { publicUrl } } = supabase.storage.from('app_images').getPublicUrl(filePath);
+          resolve(publicUrl);
+        } catch (error) {
+          alert('Upload failed.');
+          resolve(null);
+        }
+      };
+      input.click();
+    });
+  };
+
+  const handleEditProduct = async () => {
+    const id = prompt("Enter Product ID to edit:");
+    if (!id) return;
+    const { data: prod } = await supabase.from('products').select('*').eq('id', id).single();
+    if (!prod) return alert("Product not found");
+    
+    const newName = prompt("New Name (leave blank to keep current):", prod.name) || prod.name;
+    const newPrice = prompt("New Price:", prod.price) || prod.price;
+    
+    const wantsNewImage = window.confirm("Do you want to change the product image from your device gallery?");
+    let finalImage = prod.image;
+    if (wantsNewImage) {
+      const uploadedUrl = await pickAndUploadImage();
+      if (uploadedUrl) finalImage = uploadedUrl;
+    }
+    
+    await supabase.from('products').update({ name: newName, price: newPrice, image: finalImage }).eq('id', id);
+    alert("Product Updated!");
+  };
+
+  const handleEditBanner = async () => {
+    const id = prompt("Enter Animation/Banner ID to edit:");
+    if (!id) return;
+    const { data: b } = await supabase.from('animations').select('*').eq('id', id).single();
+    if (!b) return alert("Animation not found");
+    
+    const newTitle = prompt("New Title (leave blank to keep current):", b.title) || b.title;
+    
+    const wantsNewImage = window.confirm("Do you want to change the animation image from your device gallery?");
+    let finalImage = b.img;
+    if (wantsNewImage) {
+      const uploadedUrl = await pickAndUploadImage();
+      if (uploadedUrl) finalImage = uploadedUrl;
+    }
+    
+    await supabase.from('animations').update({ title: newTitle, img: finalImage }).eq('id', id);
+    alert("Animation Updated!");
+  };
+
+  const handleEditCategory = async () => {
+    const id = prompt("Enter Category ID to edit:");
+    if (!id) return;
+    const { data: cat } = await supabase.from('categories').select('*').eq('id', id).single();
+    if (!cat) return alert("Category not found");
+    
+    const newName = prompt("New Name (leave blank to keep current):", cat.name) || cat.name;
+    
+    const wantsNewImage = window.confirm("Do you want to change the category image from your device gallery?");
+    let finalImage = cat.img;
+    if (wantsNewImage) {
+      const uploadedUrl = await pickAndUploadImage();
+      if (uploadedUrl) finalImage = uploadedUrl;
+    }
+    
+    await supabase.from('categories').update({ name: newName, img: finalImage }).eq('id', id);
+    alert("Category Updated!");
+  };
+
   return (
     <div className="admin-dashboard fade-in">
       <div className="admin-header">
@@ -95,19 +187,19 @@ export default function Admin() {
         <div className="admin-card">
           <h3>Manage Products</h3>
           <p>Upload new products, set pricing, update details, attach Shein-style galleries, and toggle "Hot/New" badges.</p>
-          <button className="admin-btn primary">Open Product Editor</button>
+          <button onClick={handleEditProduct} className="admin-btn primary">Quick Edit Product</button>
         </div>
         
         <div className="admin-card">
-          <h3>Manage Banners</h3>
+          <h3>Manage Animations</h3>
           <p>Update the sliding header images on the home screen.</p>
-          <button className="admin-btn primary outline">Open Banner Editor</button>
+          <button onClick={handleEditBanner} className="admin-btn primary outline">Quick Edit Banner</button>
         </div>
 
         <div className="admin-card">
           <h3>Manage Categories</h3>
           <p>Replace generic category icons with premium image links.</p>
-          <button className="admin-btn primary outline">Open Category Editor</button>
+          <button className="admin-btn primary outline" onClick={handleEditCategory}>Quick Edit Category</button>
         </div>
       </div>
     </div>

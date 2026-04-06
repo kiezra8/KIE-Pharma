@@ -187,12 +187,15 @@ export default function Categories({ isPage, onToggle }) {
 
   return (
     <div className="categories-wrapper">
-      <section className="categories-section-home">
-        <div className="categories-scroll-container">
+      <section className="categories-section">
+        <div className="section-header">
+          <h3 className="section-title">Shop By Category</h3>
+        </div>
+        <div className="categories-grid-home">
           {mainCategories.map(cat => (
-            <div key={cat.id} className="category-item-circular" onClick={() => handleCategoryClick(cat)}>
-              <div className="category-circle-img">
-                <img src={cat.image} alt={cat.name} />
+            <div key={cat.id} className="category-item-premium" onClick={() => handleCategoryClick(cat)}>
+              <div className="category-icon-bg">
+                <img src={cat.image} alt={cat.name} className="cat-img-grid" />
               </div>
               <span className="category-label">{cat.name}</span>
             </div>

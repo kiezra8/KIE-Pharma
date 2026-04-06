@@ -44,7 +44,7 @@ html {
   background: #f8f8f8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ddd;
+  background: var(--primary);
   border-radius: 10px;
 }
 
@@ -59,11 +59,11 @@ a { text-decoration: none; color: inherit; }
 .container {
   max-width: 500px;
   margin: 0 auto;
-  background: #ffffff;
+  background: var(--bg-offset);
   min-height: 100vh;
   position: relative;
   padding-bottom: var(--nav-height);
-  box-shadow: 0 0 50px rgba(0,0,0,0.02);
+  box-shadow: 0 0 100px rgba(0,0,0,0.05);
 }
 
 @media (max-width: 500px) {
@@ -94,11 +94,11 @@ a { text-decoration: none; color: inherit; }
 
 .auth-btn {
   margin-top: 24px;
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: #fff;
   border: none;
   padding: 14px 40px;
-  border-radius: 4px;
+  border-radius: 20px;
   font-weight: 700;
   cursor: pointer;
   width: 100%;
