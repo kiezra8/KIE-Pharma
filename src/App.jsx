@@ -37,15 +37,21 @@ const defaultGeneral = [
 function AppContent() {
   const [activeTab, setActiveTab] = useState('home');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [trendingProducts, setTrendingProducts] = useState(defaultTrending);
-  const [generalProducts, setGeneralProducts] = useState(defaultGeneral);
+  const [allProductsRaw, setAllProductsRaw] = useState(defaultGeneral);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const trendingProducts = allProductsRaw.filter(p => 
+    (['Hot', 'Trending', 'New'].includes(p.badge)) && 
+    (p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  ).slice(0, 15);
+
+  const generalProducts = allProductsRaw.filter(p => 
+    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   React.useEffect(() => {
-    supabase.from('products').select('*').then(({ data, error }) => {
-      if (data && data.length > 0) {
-         setTrendingProducts(data.filter(p => ['Hot', 'Trending', 'New'].includes(p.badge)));
-         setGeneralProducts(data);
-      }
+    supabase.from('products').select('*').then(({ data }) => {
+      if (data && data.length > 0) setAllProductsRaw(data);
     });
   }, []);
 
@@ -53,7 +59,6 @@ function AppContent() {
     if (activeTab !== 'home') setIsCategoryOpen(false);
   }, [activeTab]);
 
-  // Scroll to top whenever tab changes or category opens
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab, isCategoryOpen]);
@@ -81,7 +86,7 @@ function AppContent() {
 
   return (
     <div className="container">
-      <Header />
+      <Header onSearch={setSearchQuery} />
       <main className="main-content">{renderContent()}</main>
       {activeTab !== 'admin' && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
     </div>
