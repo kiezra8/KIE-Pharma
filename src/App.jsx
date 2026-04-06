@@ -81,26 +81,9 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab, isCategoryOpen]);
 
-  if (isAppLoading) {
-    return (
-      <div className="splash-screen">
-        <div className="splash-content">
-          <div className="splash-icon-wrapper">
-             <img src="https://i.pinimg.com/736x/dc/c7/36/dcc73645645065ebee4fba4297c7e937.jpg" alt="SkieZ" />
-          </div>
-          <h1>SKIEZ PHARMA</h1>
-          <p>UGANDA'S TRUSTED PARTNER</p>
-          <div className="splash-progress">
-             <div className="progress-bar"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const renderContent = () => {
     switch (activeTab) {
-      case 'cart': return <Cart />;
+      case 'cart': return <Cart isAdmin={isAdmin} />;
       case 'categories': return <Categories isPage={true} onToggle={setIsCategoryOpen} isAdmin={isAdmin} />;
       case 'admin': return <Admin />;
       case 'account': return <Account onAdminClick={() => setActiveTab('admin')} />;
