@@ -173,6 +173,98 @@ export default function Admin() {
     alert("Category Updated!");
   };
 
+  const handleAddProduct = async () => {
+    const name = prompt("Enter Product Name:");
+    if (!name) return;
+    const price = prompt("Enter Price (UGX):", "0");
+    const desc = prompt("Enter Description:", "Product description here...");
+    const badge = prompt("Badge (Hot, New, Essential, or leave blank):", "");
+    
+    const imageUrl = await pickAndUploadImage();
+    if (!imageUrl) return alert("Image is required to add a product.");
+    
+    setLoading(true);
+    const { error } = await supabase.from('products').insert([
+      { name, price, description: desc, badge, image: imageUrl }
+    ]);
+    setLoading(false);
+    
+    if (error) alert("Error: " + error.message);
+    else alert("Product Added Successfully!");
+  };
+
+  const handleAddBanner = async () => {
+    const title = prompt("Enter Banner Title:");
+    if (!title) return;
+    const subtitle = prompt("Enter Subtitle:");
+    
+    const imageUrl = await pickAndUploadImage();
+    if (!imageUrl) return alert("Image is required for a new banner.");
+    
+    setLoading(true);
+    const { error } = await supabase.from('animations').insert([
+      { title, subtitle, img: imageUrl }
+    ]);
+    setLoading(false);
+    
+    if (error) alert("Error: " + error.message);
+    else alert("Banner Created!");
+  };
+
+  const handleAddCategory = async () => {
+    const name = prompt("Enter Category Name:");
+    if (!name) return;
+    
+    const imageUrl = await pickAndUploadImage();
+    if (!imageUrl) return alert("Image is required for a category.");
+    
+    setLoading(true);
+    const { error } = await supabase.from('categories').insert([
+      { name, img: imageUrl }
+    ]);
+    setLoading(false);
+    
+    if (error) alert("Error: " + error.message);
+    else alert("Category Added!");
+  };
+
+  const handleAddSubcategory = async () => {
+    const parentId = prompt("Enter Parent Category ID:");
+    if (!parentId) return;
+    const name = prompt("Enter Class/Subcategory Name:");
+    if (!name) return;
+    
+    const imageUrl = await pickAndUploadImage();
+    if (!imageUrl) return alert("Image is required.");
+    
+    setLoading(true);
+    const { error } = await supabase.from('subcategories').insert([
+      { name, img: imageUrl, category_id: parentId }
+    ]);
+    setLoading(false);
+    
+    if (error) alert("Error: " + error.message);
+    else alert("Drug Class Created!");
+  };
+
+  const handleEditSubcategory = async () => {
+    const id = prompt("Enter Class/Subcategory ID to edit:");
+    if (!id) return;
+    const { data: sub } = await supabase.from('subcategories').select('*').eq('id', id).single();
+    if (!sub) return alert("Subcategory not found");
+    
+    const newName = prompt("New Name:", sub.name) || sub.name;
+    const wantsNewImage = window.confirm("Do you want to change the image from your gallery?");
+    let finalImg = sub.img;
+    if (wantsNewImage) {
+      const uploadedUrl = await pickAndUploadImage();
+      if (uploadedUrl) finalImg = uploadedUrl;
+    }
+    
+    await supabase.from('subcategories').update({ name: newName, img: finalImg }).eq('id', id);
+    alert("Drug Class Updated!");
+  };
+
   return (
     <div className="admin-dashboard fade-in">
       <div className="admin-header">
@@ -184,22 +276,47 @@ export default function Admin() {
       </div>
       
       <div className="admin-grid">
+        {/* PRODUCTS SECTION */}
         <div className="admin-card">
-          <h3>Manage Products</h3>
-          <p>Upload new products, set pricing, update details, attach Shein-style galleries, and toggle "Hot/New" badges.</p>
-          <button onClick={handleEditProduct} className="admin-btn primary">Quick Edit Product</button>
+          <div className="admin-card-head">
+            <h3>Products</h3>
+            <span className="count-dot">Live</span>
+          </div>
+          <p>Add new inventory or manage existing prices and details.</p>
+          <div className="admin-actions-row">
+            <button onClick={handleAddProduct} className="admin-btn primary">Add New</button>
+            <button onClick={handleEditProduct} className="admin-btn primary outline">Edit / Delete</button>
+          </div>
         </div>
         
+        {/* BANNERS SECTION */}
         <div className="admin-card">
-          <h3>Manage Animations</h3>
-          <p>Update the sliding header images on the home screen.</p>
-          <button onClick={handleEditBanner} className="admin-btn primary outline">Quick Edit Banner</button>
+          <div className="admin-card-head">
+            <h3>Hero Banners</h3>
+            <span className="count-dot yellow">Hot</span>
+          </div>
+          <p>Update the high-impact sliding images on the home page.</p>
+          <div className="admin-actions-row">
+            <button onClick={handleAddBanner} className="admin-btn primary">Create</button>
+            <button onClick={handleEditBanner} className="admin-btn primary outline">Edit Slider</button>
+          </div>
         </div>
 
+        {/* CATEGORIES SECTION */}
         <div className="admin-card">
-          <h3>Manage Categories</h3>
-          <p>Replace generic category icons with premium image links.</p>
-          <button className="admin-btn primary outline" onClick={handleEditCategory}>Quick Edit Category</button>
+          <div className="admin-card-head">
+            <h3>Categories & Classes</h3>
+            <span className="count-dot blue">Grid</span>
+          </div>
+          <p>Manage the main 10-block matrix and their nested drug classes.</p>
+          <div className="admin-actions-row">
+            <button onClick={handleAddCategory} className="admin-btn primary">New Cat</button>
+            <button onClick={handleEditCategory} className="admin-btn primary outline">Edit Cat</button>
+          </div>
+          <div className="admin-actions-row" style={{marginTop: '10px'}}>
+            <button onClick={handleAddSubcategory} className="admin-btn primary outline">Add Class</button>
+            <button onClick={handleEditSubcategory} className="admin-btn primary text">Edit Class</button>
+          </div>
         </div>
       </div>
     </div>

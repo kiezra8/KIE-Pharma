@@ -57,79 +57,46 @@
 }
 
 .admin-btn.primary {
-  background: #1a1a1a;
+  background: var(--primary-gradient);
   color: #fff;
   margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.25);
 }
 
 .admin-btn.primary.outline {
   background: transparent;
-  color: #1a1a1a;
-  border: 2px solid #1a1a1a;
+  color: #222;
+  border: 1.5px solid #eee;
 }
 
-.admin-btn.text {
-  background: transparent;
-  color: #ff6b6b;
-}
-
-.admin-btn:active {
-  transform: scale(0.98);
-}
-
-.admin-dashboard {
-  padding: 20px;
-}
-
-.admin-header {
+.admin-card-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+  margin-bottom: 12px;
 }
 
-.admin-header h2 {
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.admin-badge {
-  display: inline-block;
+.count-dot {
   background: #e8f5e9;
   color: #2e7d32;
   padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  margin-top: 5px;
-}
-
-.admin-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.admin-card {
-  background: #fff;
-  padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-}
-
-.admin-card h3 {
-  font-size: 18px;
+  font-size: 10px;
   font-weight: 800;
-  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
-.admin-card p {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 20px;
+.count-dot.yellow { background: #fff8e1; color: #f57f17; }
+.count-dot.blue { background: #e3f2fd; color: #1565c0; }
+
+.admin-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.admin-actions-row .admin-btn {
+  flex: 1;
+  padding: 12px;
+  font-size: 13px;
 }
