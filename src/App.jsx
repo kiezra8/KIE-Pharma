@@ -88,7 +88,7 @@ function AppContent() {
     <div className="container">
       <Header onSearch={setSearchQuery} />
       <main className="main-content">{renderContent()}</main>
-      {activeTab !== 'admin' && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 }

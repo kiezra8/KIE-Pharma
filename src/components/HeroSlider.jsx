@@ -4,7 +4,8 @@ import './HeroSlider.css';
 
 const defaultBanners = [
   { id: 1, title: "Advanced Pharmaceutical Care", subtitle: "Your Trusted Partner in Health", img: "https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg" },
-  { id: 2, title: "Turbo Fast Delivery", subtitle: "Swift pharmaceutical delivery across Uganda within 24 hours.", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1200" }
+  { id: 2, title: "Turbo Fast Delivery", subtitle: "Swift pharmaceutical delivery across Uganda within 24 hours.", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1200" },
+  { id: 3, title: "Quality Lab Equipment", subtitle: "Precision tools for modern medical diagnostic centers.", img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=1200" }
 ];
 
 export default function HeroSlider() {

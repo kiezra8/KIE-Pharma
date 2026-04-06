@@ -131,5 +131,6 @@ INSERT INTO products (name, description, price, image, badge, category_id) VALUE
 -- 3. Insert Initial Animations
 INSERT INTO animations (title, subtitle, img, is_delivery) VALUES
 ('Advanced Pharmaceutical Care', 'Your Trusted Partner in Health', 'https://i.pinimg.com/1200x/15/4f/6c/154f6c6318fc250236c54376d906f452.jpg', FALSE),
-('Turbo Fast Delivery', 'Swift pharmaceutical delivery across Uganda within 24 hours.', 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1200', TRUE)
+('Turbo Fast Delivery', 'Swift pharmaceutical delivery across Uganda within 24 hours.', 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1200', TRUE),
+('Quality Lab Equipment', 'Precision tools for modern medical diagnostic centers.', 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=1200', FALSE)
 ON CONFLICT DO NOTHING;
