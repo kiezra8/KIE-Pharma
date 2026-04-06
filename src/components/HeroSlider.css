@@ -73,6 +73,7 @@
   letter-spacing: 2px;
   line-height: 1.1;
   text-shadow: 0px 4px 12px rgba(0,0,0,0.4);
+  color: #fff !important;
 }
 
 .banner.active .banner-overlay.suit-up-style h3 {
@@ -87,7 +88,7 @@
   opacity: 0;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
+  color: #fff !important;
   margin-top: 10px;
 }
 
