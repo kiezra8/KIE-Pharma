@@ -1,107 +1,104 @@
 .header {
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  width: 100%;
-  padding: 12px 15px;
-  transition: all .3s;
   position: sticky;
   top: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 
 .logo {
-  background: var(--primary-gradient-logo);
+  font-family: 'Outfit';
+  font-size: 24px;
+  font-weight: 950;
+  letter-spacing: -1.5px;
+  background: var(--primary-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
-  flex-shrink: 0;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .search-bar {
-  background: #f5f6f8;
-  border: 1.5px solid transparent;
-  border-radius: 20px;
-  flex: 1;
-  align-items: center;
-  max-width: 100%;
-  padding: 8px 15px;
-  transition: all .3s;
+  background: #F1F2F6;
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
   display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  border: 1.5px solid transparent;
 }
 
 .search-bar:focus-within {
   background: #fff;
   border-color: var(--primary);
-  transform: translateY(-1px);
   box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+  transform: translateY(-1px);
 }
 
 .search-bar input {
-  background: 0 0;
+  flex: 1;
   border: none;
   outline: none;
-  flex: 1;
-  margin-left: 10px;
-  font-size: 14px;
-  color: #333 !important;
-}
-
-.search-bar input::placeholder {
-  color: #999;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 .header-icons {
-  flex-shrink: 0;
-  gap: 10px;
   display: flex;
+  gap: 12px;
 }
 
 .wishlist-header-icon, .account-header-icon {
-  background: #f5f6f8;
-  border-radius: 12px;
-  justify-content: center;
-  align-items: center;
-  width: 42px;
-  height: 42px;
-  transition: all .3s;
+  width: 44px;
+  height: 44px;
+  background: #F1F2F6;
+  border-radius: 14px;
   display: flex;
-  position: relative;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  color: #333;
 }
 
 .wishlist-header-icon:hover, .account-header-icon:hover {
-  color: var(--primary);
-  transform: scale(1.05);
+  background: var(--primary);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 .wishlist-badge {
-  color: #fff;
+  position: absolute;
+  top: -4px;
+  right: -4px;
   background: var(--primary);
-  border: 2px solid #fff;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 18px;
-  height: 18px;
+  color: #fff;
   font-size: 10px;
   font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
   display: flex;
-  position: absolute;
-  top: -2px;
-  right: -2px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
 }
+

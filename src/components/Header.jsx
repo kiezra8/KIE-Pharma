@@ -3,7 +3,7 @@ import { Search, Heart, User, Bell } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import './Header.css';
 
-export default function Header({ onSearch }) {
+export default function Header({ onSearch, isAdmin }) {
   const { cartCount } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -17,7 +17,7 @@ export default function Header({ onSearch }) {
     <header className="header">
       <div className="header-top">
         <div className="logo" onClick={() => window.location.reload()}>
-          SkieZ Pharma {isAdmin && <span className="admin-status-pill">ADMIN MODE</span>}
+          KIE PHARMA {isAdmin && <span className="admin-status-pill">ADMIN</span>}
         </div>
         <div className="header-icons">
           <div className="wishlist-header-icon">
@@ -33,7 +33,7 @@ export default function Header({ onSearch }) {
         <Search size={18} color="#999" />
         <input 
           type="text" 
-          placeholder="Search medical supplies..." 
+          placeholder="Search items..." 
           value={searchTerm}
           onChange={handleChange}
         />
@@ -41,3 +41,4 @@ export default function Header({ onSearch }) {
     </header>
   );
 }
+

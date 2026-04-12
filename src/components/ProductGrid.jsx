@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Plus, Edit3, Trash2, X, Check } from 'lucide-react';
+import { Heart, Plus, Edit3, Trash2, X, Check, Camera } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import ProductDetail from './ProductDetail';
 import { pickAndUploadImage } from '../utils/imageUtils';

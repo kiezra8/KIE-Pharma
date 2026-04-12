@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import HeroSlider from './components/HeroSlider';
@@ -33,6 +33,21 @@ const defaultGeneral = [
   { id: 202, name: "Hospital Bed V3", desc: "Mechanical adjustable ward bed", price: 1850000, image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=300", badge: "" }
 ];
 
+function Splash() {
+  return (
+    <div className="splash-screen">
+      <div className="splash-content">
+        <div className="splash-icon-wrapper">
+          <img src="https://i.pinimg.com/736x/67/41/88/6741885f8f5370d0696321287e07670d.jpg" alt="Logo" />
+        </div>
+        <h1>KIE PHARMA</h1>
+        <p>Distributing Quality Medical Supplies</p>
+        <div className="splash-progress"><div className="progress-bar"></div></div>
+      </div>
+    </div>
+  );
+}
+
 function AppContent() {
   const [session, setSession] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
@@ -58,7 +73,7 @@ function AppContent() {
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function initCatalog() {
       try {
         const { data } = await supabase.from('products').select('*');
@@ -66,19 +81,21 @@ function AppContent() {
       } catch (err) {
         console.error("Catalog Init Error:", err);
       } finally {
-        setTimeout(() => setIsAppLoading(false), 1500);
+        setTimeout(() => setIsAppLoading(false), 2000);
       }
     }
     initCatalog();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeTab !== 'home') setIsCategoryOpen(false);
   }, [activeTab]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab, isCategoryOpen]);
+
+  if (isAppLoading) return <Splash />;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -116,5 +133,6 @@ function App() {
     </CartProvider>
   );
 }
+
 
 export default App;
